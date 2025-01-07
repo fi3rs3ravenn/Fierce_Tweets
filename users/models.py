@@ -10,5 +10,4 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-    email = models.EmailField(blank=True, null=True)  # Email необязателен
 
