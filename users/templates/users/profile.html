@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+    <h1>Profile {{ user.username }}</h1>
+    <p>Email: {{ user.email }}</p>
+    <p>Bio: {{ user.bio }}</p>
+    <img src="{{ user.avatar.url }}" alt="Аватар" style="max-width: 200px; height: auto;">
+    <p>Subscribers: {{ user.followers.count }}</p>
+    <p>Subscriptions: {{ user.following.count }}</p>
+
+    <a href="{% url 'edit_profile' %}">Edit Profile</a>
+    <a href="{% url 'logout' %}">Logout</a>
+
+    {% if user != request.user %}
+        <form method="post" action="{% url 'follow' user.username %}">
+            {% csrf_token %}
+            <button type="submit">
+                {% if request.user in user.followers.all %}
+                    Unsubscribe
+                {% else %}
+                    Subscribe
+                {% endif %}
+            </button>
+        </form>
+    {% endif %}
+</body>
+</html>
