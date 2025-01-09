@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>{{ tweet.title }}</title>
+</head>
+<body>
+    <h1>{{ tweet.title }}</h1>
+    <p>{{ tweet.content }}</p>
+    {% if tweet.image %}
+        <img src="{{ tweet.image.url }}" alt="Изображение" style="max-width: 500px;">
+    {% endif %}
+    <p>Теги: 
+        {% for tag in tweet.tags.all %}
+            #{{ tag.name }}
+        {% endfor %}
+    </p>
+    <a href="{% url 'home' %}">Назад</a>
+</body>
+</html>

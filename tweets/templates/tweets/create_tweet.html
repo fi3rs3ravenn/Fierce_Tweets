@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Создать твит</title>
+</head>
+<body>
+    <h1>Создать новый твит</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Опубликовать</button>
+    </form>
+    <a href="{% url 'home' %}">Назад</a>
+</body>
+</html>
