@@ -9,11 +9,11 @@
     {% if tweet.image %}
         <img src="{{ tweet.image.url }}" alt="Изображение" style="max-width: 500px;">
     {% endif %}
-    <p>Теги: 
+    <p>Tags: 
         {% for tag in tweet.tags.all %}
             #{{ tag.name }}
         {% endfor %}
     </p>
-    <a href="{% url 'home' %}">Назад</a>
+    <a href="{% url 'home' %}">Back home</a>
 </body>
 </html>

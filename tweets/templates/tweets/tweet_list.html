@@ -1,33 +1,56 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <title>Твиттер-клон</title>
-</head>
-<body>
-    <h1>Лента твитов</h1>
-    <a href="{% url 'create_tweet' %}">Создать твит</a> | 
-    {% if not user.is_authenticated %}
-        <a href="{% url 'login' %}">Войти</a> | <a href="{% url 'register' %}">Регистрация</a>
-    {% else %}
-        Привет, {{ user.username }} | <a href="{% url 'logout' %}">Выйти</a>
-    {% endif %}
+{% block content %}
+<h2>TWEETS</h2>
 
-    <ul>
-        {% for tweet in tweets %}
-            <li>
-                <strong>{{ tweet.user.username }}</strong> — {{ tweet.created_at|date:"d.m.Y H:i" }}
-                <p>{{ tweet.content }}</p>
-                {% if tweet.image %}
-                    <img src="{{ tweet.image.url }}" alt="Изображение" style="max-width: 300px;">
-                {% endif %}
-                <p>Теги: 
-                    {% for tag in tweet.tags.all %}
-                        #{{ tag.name }}
-                    {% endfor %}
-                </p>
-                <a href="{% url 'tweet_detail' slug=tweet.slug %}">Подробнее</a>
-            </li>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% form.as_p %}
+    <button type="submit">Tweet</button>
+</form>
+
+<hr>
+
+<ul class="tweet-list">
+    {% for tweet in tweets %}
+        <li class="tweet-item">
+            <strong>{{ tweet.user.username }}</strong>: {{ tweet.content }}
+            <p>{{ tweet.created_at|date }}</p>
+            {% if tweet.media %}
+                <p><img src="{{ tweet.media.url }}" alt="Tweet Media" style="max-width: 300px;"></p>
+            {% endif %}
+
+
+            <form method="post" action="" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit">
+                    ❤️ {{ tweet.total_likes }}
+                </button>
+            </form>
+
+            {% if tweet.user == request.user %}
+                <a href="{% url 'edit_tweet' tweet.id %}">Edit</a>
+                <a href="{% url 'delete_tweet' tweet.id %}">Delete</a>
+            {% endif %}
+            
+            <h5>Comments</h5>
+            <ul>
+                {% for comment in tweet.comments.all %}
+                    <li>
+                        <strong>{{ comment.user.username }}</strong>: {{ comment.content }}
+                        <span>({{ comment.created_at|date }})</span>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <form method="post" action="{% url 'add_comment' tweet_id %}" class="comment-form">
+                {% csrf_token %} 
+                <textarea name="content" placeholder="Write a comment..." rows="2" required></textarea>
+                <button type="submit">Comment</button>
+            </form>
+        </li>
+        <hr>
+        {% empty %}
+            <li>No tweets available</li>
         {% endfor %}
-    </ul>
-</body>
-</html>
+</ul>
+{% endblock %}
