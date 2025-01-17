@@ -79,3 +79,10 @@ def following_list_view(request, username):
     user = get_object_or_404(CustomUser, username=username)
     following = user.following.all()
     return render(request, 'users/following_list.html', {'user': user, 'following': following})
+
+@login_required
+def delete_account_view(request):
+    if request.method == 'POST':
+        request.user.delete()
+        return redirect('register')  
+    return render(request, 'users/delete_account.html')

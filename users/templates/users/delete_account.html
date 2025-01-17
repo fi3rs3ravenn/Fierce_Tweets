@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deleting account</title>
+</head>
+<body>
+    <h1>Account deletion confirmation</h1>
+    <p>Are you sure you want to delete your account? This action is irreversible</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Delete Account</button>
+    </form>
+    <a href="{% url 'profile' username=request.user.username %}">Cancel</a>
+</body>
+</html>
