@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegisterForm, LoginForm, EditProfileForm
 from .models import CustomUser
+from tweets.models import Tweet
 
 def register_view(request):
     if request.method == 'POST':
@@ -29,7 +30,17 @@ def login_view(request):
 @login_required
 def profile_view(request, username):
     user = get_object_or_404(CustomUser, username=username)
-    return render(request, 'users/profile.html', {'user': user})
+    user_tweets = Tweet.objects.filter(user=user).order_by('-created_at')
+    
+    mutual_followers = user.followers.filter(id__in=request.user.following.all())
+    
+    return render(
+        request, 'users/profile.html', {
+            'user': user,
+            'tweets': user_tweets,
+            'mutual_followers': mutual_followers
+        }
+    )
 
 @login_required
 def edit_profile_view(request):
@@ -56,3 +67,15 @@ def follow_user_view(request, username):
         else:
             request.user.following.add(user_to_follow)
     return redirect('profile', username=username)
+
+@login_required
+def followers_list_view(request, username):
+    user = get_object_or_404(CustomUser, username=username)
+    followers = user.followers.all()
+    return render(request, 'users/followers_list.html', {'user': user, 'followers': followers})
+
+@login_required
+def following_list_view(request, username):
+    user = get_object_or_404(CustomUser, username=username)
+    following = user.following.all()
+    return render(request, 'users/following_list.html', {'user': user, 'following': following})

@@ -2,20 +2,18 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render , get_object_or_404 , redirect
 from .models import Tweet
 from .forms import TweetForm , CommentForm
+from django.db.models import Q
 
 def tweet_list(request):
-    tweets = Tweet.objects.all().order_by('-created_at')
-    if request.method == 'POST':
-        form = TweetForm(request.POST, request.FILES)
-        if form.is_valid():
-            tweet = form.save(commit=False)
-            tweet.user = request.user
-            tweet.save()
-            return redirect('tweet_list')
+    if request.user.is_authenticated:
+        tweets = Tweet.objects.filter(
+            Q(user__in=request.user.following.all()) | Q(user=request.user)
+        ).order_by('-created_at')
     else:
-        form = TweetForm()
-    return render(request, 'tweets/tweet_list.html', {'tweets': tweets , 'form': form})
+        tweets = Tweet.objects.all().order_by('-created_at')
 
+    form = TweetForm()
+    return render(request, 'tweets/tweet_list.html', {'tweets': tweets, 'form': form})
 
 @login_required
 def edit_tweet(request, tweet_id):
