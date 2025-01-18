@@ -12,7 +12,15 @@ def tweet_list(request):
     else:
         tweets = Tweet.objects.all().order_by('-created_at')
 
-    form = TweetForm()
+    if request.method == 'POST':
+        form = TweetForm(request.POST, request.FILES)
+        if form.is_valid():
+            tweet = form.save(commit=False)
+            tweet.user = request.user
+            tweet.save()
+            return redirect('tweet_list')
+    else:
+        form = TweetForm()
     return render(request, 'tweets/tweet_list.html', {'tweets': tweets, 'form': form})
 
 @login_required

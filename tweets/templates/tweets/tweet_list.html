@@ -1,11 +1,15 @@
+{% extends 'base.html' %}
+
 {% block content %}
 <h2>TWEETS</h2>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Tweet</button>
-</form>
+{% if user.is_authenticated %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Tweet</button>
+    </form>
+{% endif %}
 
 {% if tweets %}
     <ul class="tweet-list">
@@ -15,6 +19,14 @@
                 <p>{{ tweet.created_at }}</p>
                 {% if tweet.media %}
                     <img src="{{ tweet.media.url }}" alt="Tweet Media">
+                    <style>
+                        img {
+                            max-width: 25%;
+                            height: auto;
+                            display: block;
+                            margin: 10px auto;
+                        }
+                    </style>
                 {% endif %}
             </li>
         {% endfor %}

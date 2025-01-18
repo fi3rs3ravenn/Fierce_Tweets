@@ -11,7 +11,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('profile', username=user.username)
+            return redirect('users:profile', username=user.username)
     else:
         form = RegisterForm()
     return render(request, 'users/register.html', {'form': form})
@@ -22,7 +22,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('profile', username=user.username)
+            return redirect('users:profile', username=user.username)
     else:
         form = LoginForm()
     return render(request, 'users/login.html', {'form': form})
@@ -48,7 +48,7 @@ def edit_profile_view(request):
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile', username=request.user.username)
+            return redirect('users:profile', username=request.user.username)
     else:
         form = EditProfileForm(instance=request.user)
     return render(request, 'users/edit_profile.html', {'form': form})
@@ -56,7 +56,7 @@ def edit_profile_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('users:login')
 
 @login_required
 def follow_user_view(request, username):
@@ -66,7 +66,7 @@ def follow_user_view(request, username):
             request.user.following.remove(user_to_follow)
         else:
             request.user.following.add(user_to_follow)
-    return redirect('profile', username=username)
+    return redirect('users:profile', username=username)
 
 @login_required
 def followers_list_view(request, username):
@@ -84,5 +84,5 @@ def following_list_view(request, username):
 def delete_account_view(request):
     if request.method == 'POST':
         request.user.delete()
-        return redirect('register')  
+        return redirect('users:register')  
     return render(request, 'users/delete_account.html')

@@ -12,6 +12,6 @@
         {{ form.as_p }}
         <button type="submit">Save changes</button>
     </form>
-    <a href="{% url 'profile' username=request.user.username %}">Back to profile</a>
+    <a href="{% url 'users:profile' username=request.user.username %}">Back to profile</a>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <h1>{{ user.username }} is Following</h1>
 <ul>
     {% for follow in following %}
-        <li><a href="{% url 'profile' follow.username %}">{{ follow.username }}</a></li>
+        <li><a href="{% url 'users:profile' follow.username %}">{{ follow.username }}</a></li>
     {% endfor %}
 </ul>
-<a href="{% url 'profile' user.username %}">Back to Profile</a>
+<a href="{% url 'users:profile' user.username %}">Back to Profile</a>

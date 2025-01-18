@@ -12,6 +12,6 @@
         {% csrf_token %}
         <button type="submit">Delete Account</button>
     </form>
-    <a href="{% url 'profile' username=request.user.username %}">Cancel</a>
+    <a href="{% url 'users:profile' username=request.user.username %}">Cancel</a>
 </body>
 </html>
