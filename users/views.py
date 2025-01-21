@@ -56,7 +56,7 @@ def edit_profile_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('users:login')
+    return redirect('tweet_list')
 
 @login_required
 def follow_user_view(request, username):
@@ -84,5 +84,5 @@ def following_list_view(request, username):
 def delete_account_view(request):
     if request.method == 'POST':
         request.user.delete()
-        return redirect('users:register')  
+        return redirect('')  
     return render(request, 'users/delete_account.html')
