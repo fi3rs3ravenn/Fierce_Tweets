@@ -15,7 +15,8 @@
     <ul class="tweet-list">
         {% for tweet in tweets %}
             <li>
-                <strong>{{ tweet.user.username }}</strong>: {{ tweet.content }}
+                <strong>{{ tweet.user.username }}</strong>
+                <a href="{% url 'tweet_detail' tweets.slug %}"> {{ tweet.content }} </a>
                 <p>{{ tweet.created_at }}</p>
                 {% if tweet.media %}
                     <img src="{{ tweet.media.url }}" alt="Tweet Media">

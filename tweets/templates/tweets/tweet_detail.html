@@ -1,19 +1,42 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <title>{{ tweet.title }}</title>
-</head>
-<body>
-    <h1>{{ tweet.title }}</h1>
-    <p>{{ tweet.content }}</p>
-    {% if tweet.image %}
-        <img src="{{ tweet.image.url }}" alt="Изображение" style="max-width: 500px;">
-    {% endif %}
-    <p>Tags: 
-        {% for tag in tweet.tags.all %}
-            #{{ tag.name }}
-        {% endfor %}
-    </p>
-    <a href="{% url 'home' %}">Back home</a>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content  %}
+
+<h2>{{ tweet.user.username }}</h2>
+<p>{{ tweet.content }}</p>
+<p>{{ tweet.created_at }}</p>
+
+{% if tweet.media %}
+    <img src="{{ tweet.media.url }}" alt="Tweet Media">
+{% endif %}
+
+<p> Likes: {{ tweet.total_likes }} </p>
+<form method="post" action="{% url "like_tweet" tweet.id %}">
+    {% csrf_token %}
+    <button type='submit'>
+        {% if user in tweet.likes.all %}
+            Remove Like
+        {% else %}
+            Like
+        {% endif %}
+    </button>
+</form>
+
+<h3>Comments</h3>
+<ul>
+    {% for comment in comments %}
+        <li>
+            <strong>{{ comment.user.username }}</strong>: {{ comment.content }}
+            <p> {{ comment.created_at }} </p>
+        </li>
+    {% endfor %}
+</ul>
+
+<H4> Add Comment: </H4>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type='submit'> Comment </button>
+</form>
+
+{% endblock  %}

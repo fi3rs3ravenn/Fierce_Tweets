@@ -23,6 +23,34 @@ def tweet_list(request):
         form = TweetForm()
     return render(request, 'tweets/tweet_list.html', {'tweets': tweets, 'form': form})
 
+
+
+@login_required
+def tweet_detail(request, slug):
+    tweet = get_object_or_404(Tweet, slug=slug)
+    comments = tweet.comments.all().order_by('-created_at')
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.tweet = tweet 
+            comment.save()
+            return redirect('tweet_detail', slug=slug)
+    else:
+        form = CommentForm()
+
+    return render(
+        request, 'tweets/tweet_detail.html', {
+            'tweet': tweet,
+            'comments': comments,
+            'form':form,
+        }
+    )
+
+
+
 @login_required
 def edit_tweet(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id)
