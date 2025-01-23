@@ -5,6 +5,13 @@ from .forms import RegisterForm, LoginForm, EditProfileForm
 from .models import CustomUser
 from tweets.models import Tweet
 
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import CustomUser
+from .serializers import UserSerializer
+
+
 def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST, request.FILES)
@@ -86,3 +93,10 @@ def delete_account_view(request):
         request.user.delete()
         return redirect('')  
     return render(request, 'users/delete_account.html')
+
+
+class UserListAPIView(APIView):
+    def get(self, request):
+        users = CustomUser.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)

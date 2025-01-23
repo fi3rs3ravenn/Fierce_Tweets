@@ -97,3 +97,19 @@ def add_comment(request, tweet_id):
             return redirect('tweet_list')
     return redirect('tweet_list')
 
+
+class TweetListCreateAPIView(APIView):
+    def get(self, request):
+        tweets = Tweet.objects.all()
+        serializer = TweetSerializer(tweets , many=True)
+        if serializer.is_valid():
+            return Response(serializer.data)
+        
+    def post(self, request):
+        serializer = TweetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
