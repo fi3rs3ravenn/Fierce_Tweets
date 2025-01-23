@@ -4,6 +4,11 @@ from .models import Tweet
 from .forms import TweetForm , CommentForm
 from django.db.models import Q
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import TweetSerializer
+
 def tweet_list(request):
     if request.user.is_authenticated:
         tweets = Tweet.objects.filter(
@@ -22,7 +27,6 @@ def tweet_list(request):
     else:
         form = TweetForm()
     return render(request, 'tweets/tweet_list.html', {'tweets': tweets, 'form': form})
-
 
 
 @login_required
@@ -48,7 +52,6 @@ def tweet_detail(request, slug):
             'form':form,
         }
     )
-
 
 
 @login_required
