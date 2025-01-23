@@ -102,8 +102,7 @@ class TweetListCreateAPIView(APIView):
     def get(self, request):
         tweets = Tweet.objects.all()
         serializer = TweetSerializer(tweets , many=True)
-        if serializer.is_valid():
-            return Response(serializer.data)
+        return Response(serializer.data)
         
     def post(self, request):
         serializer = TweetSerializer(data=request.data)
@@ -111,5 +110,4 @@ class TweetListCreateAPIView(APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
     
