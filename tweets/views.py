@@ -23,7 +23,7 @@ def tweet_list(request):
             tweet = form.save(commit=False)
             tweet.user = request.user
             tweet.save()
-            return redirect('tweet_list')
+            return redirect('tweets:tweet_list')
     else:
         form = TweetForm()
     return render(request, 'tweets/tweet_list.html', {'tweets': tweets, 'form': form})
@@ -41,7 +41,7 @@ def tweet_detail(request, slug):
             comment.user = request.user
             comment.tweet = tweet 
             comment.save()
-            return redirect('tweet_detail', slug=slug)
+            return redirect('tweets:tweet_detail', slug=slug)
     else:
         form = CommentForm()
 
@@ -58,12 +58,12 @@ def tweet_detail(request, slug):
 def edit_tweet(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id)
     if request.user != tweet.user:
-        return redirect('tweet_list')
+        return redirect('tweets:tweet_list')
     if request.method == 'POST':
         form = TweetForm(request.POST, request.FILES, instance=tweet)
         if form.is_valid():
             form.save()
-            return redirect('tweet_list')
+            return redirect('tweets:tweet_list')
     else:
         form = TweetForm(instance=tweet)
     return render(request, 'tweets/edit_tweet.html' , {'form': form})
@@ -73,7 +73,7 @@ def delete_tweet(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id)
     if request.user == tweet.user:
         tweet.delete()
-    return redirect('tweet_list')
+    return redirect('tweets:tweet_list')
 
 @login_required
 def like_tweet(request, tweet_id):
@@ -82,7 +82,7 @@ def like_tweet(request, tweet_id):
         tweet.likes.remove(request.user)
     else:
         tweet.likes.add(request.user)
-    return redirect('tweet_list')
+    return redirect('tweets:tweet_list')
 
 @login_required 
 def add_comment(request, tweet_id):
@@ -94,8 +94,8 @@ def add_comment(request, tweet_id):
             comment.user = request.user
             comment.tweet = tweet 
             comment.save()
-            return redirect('tweet_list')
-    return redirect('tweet_list')
+            return redirect('tweets:tweet_list')
+    return redirect('tweets:tweet_list')
 
 
 class TweetListCreateAPIView(APIView):

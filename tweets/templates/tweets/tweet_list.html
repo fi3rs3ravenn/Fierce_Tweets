@@ -1,39 +1,56 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h2>TWEETS</h2>
+<div class="tweet-form">
+    {% if user.is_authenticated %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn tweet-btn">Tweet</button>
+        </form>
+    {% endif %}
+</div>
 
-{% if user.is_authenticated %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Tweet</button>
-    </form>
-{% endif %}
+<div class="tweets">
+    {% if tweets %}
+        <ul class="tweet-list">
+            {% for tweet in tweets %}
+                <li class="tweet-card">
+                    <h3>
+                        <a href="{% url 'users:profile' tweet.user.username %}">
+                            {{ tweet.user.username }}
+                        </a>
+                    </h3>
+                    <p>
+                        <a href="{% url 'tweets:tweet_detail' tweet.slug %}">
+                            {{ tweet.content }}
+                        </a>
+                    </p>
+                    <p>{{ tweet.created_at }}</p>
 
-{% if tweets %}
-    <ul class="tweet-list">
-        {% for tweet in tweets %}
-            <li>
-                <strong>{{ tweet.user.username }}</strong>
-                <a href="{% url 'tweet_detail' tweets.slug %}"> {{ tweet.content }} </a>
-                <p>{{ tweet.created_at }}</p>
-                {% if tweet.media %}
-                    <img src="{{ tweet.media.url }}" alt="Tweet Media">
-                    <style>
-                        img {
-                            max-width: 25%;
-                            height: auto;
-                            display: block;
-                            margin: 10px auto;
-                        }
-                    </style>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No tweets to display. Follow users to see their tweets!</p>
-{% endif %}
+                    {% if tweet.media %}
+                        <img src="{{ tweet.media.url }}" alt="Tweet Media">
+                    {% endif %}
 
+                    <div class="tweet-actions">
+                        <a href="{% url 'tweets:like_tweet' tweet.id %}" class="btn">
+                            {% if user in tweet.likes.all %}
+                                ❤️ Remove
+                            {% else %}
+                                🤍 Like
+                            {% endif %}
+                        </a>
+                        <span> ❤️ {{ tweet.total_likes }} </span>
+
+                        {% if tweet.user == user %}
+                            <a href="/" class="btn">✏️ Edit</a>
+                            <a href="/" class="btn text-danger">🗑️ Delete</a>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tweets</p>
+    {% endif %}
+</div>
 {% endblock %}
