@@ -1,4 +1,3 @@
-
 body {
     font-family: Arial, sans-serif;
     background-color: #000000;
@@ -17,18 +16,23 @@ body {
 }
 
 
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+
 .sidebar-container {
-    width: 20%;
-    position: fixed; 
-    left: 0;
-    top: 0;
-    height: 100vh;
+    width: 15%;
     display: flex;
     justify-content: flex-end;
 }
 
 .sidebar {
-    width: 90%;
+    width: 100%; 
     background-color: #1d152b;
     border-radius: 15px;
     padding: 20px;
@@ -38,23 +42,30 @@ body {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.sidebar a {
-    color: #ffffff;
-    text-decoration: none;
-    padding: 10px 15px;
+.right-panel-container {
+    width: 15%; 
     display: flex;
-    align-items: center;
-    border-radius: 30px;
-    transition: background-color 0.3s ease;
+    justify-content: flex-start;
 }
 
-.sidebar .icon {
-    margin-right: 10px;
+.right-panel {
+    width: 100%; 
+    background-color: #1d152b;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.sidebar a:hover {
-    background-color: #6718c2;
+.main-content {
+    width: 50%; 
+    padding: 20px;
+    background-color: #000000;
+    border-radius: 15px;
+    overflow-y: auto;
+    max-height: 100vh;
 }
+
+
 
 .tweet-btn {
     background-color: #6718c2;
@@ -73,52 +84,159 @@ body {
 }
 
 
-.main-content {
-    width: 50%;
-    margin-left: 25%;
-    margin-right: 25%;
-    padding: 20px;
-    background-color: #000000;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-    overflow-y: auto; 
-    max-height: 100vh; 
-}
-
-
-.right-panel-container {
-    width: 20%;
-    position: fixed; 
-    right: 0;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.right-panel {
-    width: 90%;
+.tweet-card {
     background-color: #1d152b;
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px;
+    margin-bottom: 25px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-.right-panel h2 {
-    margin-bottom: 15px;
     color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.right-panel ul {
-    list-style: none;
-    padding: 0;
+.tweet-media {
+    width: 100%; 
+    max-height: 400px;
+    object-fit: contain; 
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-.right-panel li {
+
+.tweet-card {
+    max-width: 600px; 
+    margin: 0 auto; 
+}
+
+.tweet-content {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+
+.tweet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 10px;
+}
+
+.tweet-author {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
     color: #1da1f2;
 }
 
-img {
-    max-width: 200px; height: auto;
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #6718c2;
+}
+
+
+.tweet-card:hover {
+    background-color: #2a1b3d;
+}
+
+
+.tweet-author {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #1da1f2;
+}
+
+
+.tweet-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #38444d;
+}
+
+.tabs a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s ease;
+}
+
+.tabs a.active {
+    border-bottom: 2px solid #6718c2;
+}
+
+
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 30px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.menu-item .icon {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.menu-item:hover {
+    background-color: #6718c2;
+}
+
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto; 
+    padding-top: 20px;
+    border-top: 1px solid #38444d;
+}
+
+.profile-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #6718c2;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.profile-username {
+    font-weight: bold;
+    color: #1da1f2;
+}
+
+.profile-name {
+    font-size: 12px;
+    color: #c4c4c4;
 }

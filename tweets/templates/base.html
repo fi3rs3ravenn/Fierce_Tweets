@@ -4,42 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Fierce-Tweets{% endblock %}</title>
+    <title>{% block title %}Fierce Tweets{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
     <div class="container">
-        <!-- Левая панель -->
-        <aside class="sidebar-container">
+        <div class="sidebar-container">
             <div class="sidebar">
-                <a href="{% url 'tweets:tweet_list' %}">
-                    <span class="icon">🏠</span> Main
+                <a href="#" class="menu-item">
+                    <span class="icon">🏠</span> Главная
                 </a>
-                <a href="#">
-                    <span class="icon">🔍</span> See
+                <a href="#" class="menu-item">
+                    <span class="icon">🔍</span> Search
                 </a>
-                <a href="#">
+                <a href="#" class="menu-item">
                     <span class="icon">🔔</span> Notifications
                 </a>
-                <a href="#">
-                    <span class="icon">📨</span> Messages
+                <a href="#" class="menu-item">
+                    <span class="icon">📘</span> Bookmarks
                 </a>
-                <a href="#">
-                    <span class="icon">⭐</span> Bookmarks
+                <a href="#" class="menu-item">
+                    <span class="icon">✉️</span> Messages
                 </a>
-                <a href="{% url 'users:profile' user.username %}">
+                <a href="{% url 'users:profile' user.username %}" class="menu-item">
                     <span class="icon">👤</span> Profile
                 </a>
-                <button class="btn tweet-btn">Publish Post</button>
-            </div>
-        </aside>
 
+                <div class="profile-section">
+                    <img src="{{ user.avatar.url }}" alt="Avatar" class="profile-avatar">
+                    <div class="profile-info">
+                        <span class="profile-username">{{ user.username }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <main class="main-content">
             {% block content %}
             {% endblock %}
         </main>
-
 
         <aside class="right-panel-container">
             <div class="right-panel">
