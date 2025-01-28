@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Bookmarks</h1>
+<div class="tweets">
+    {% if bookmarks %}
+        <ul class="tweet-list">
+            {% for tweet in bookmarks %}
+                <li class="tweet-card">
+                    <div class="tweet-header">
+                        <a href="{% url 'users:profile' tweet.user.username %}" class="tweet-author">
+                            <img src="{{ tweet.user.avatar.url }}" alt="Аватар" class='avatar'>
+                            <span>{{ tweet.user.username }}</span>
+                        </a>
+                        <span class="tweet-date">{{ tweet.created_at }}</span>
+                    </div>
+                    <p class="tweet-content">{{ tweet.content }}</p>
+                    {% if tweet.media %}
+                        <img src="{{ tweet.media.url }}" alt="Tweet Media" class="tweet-media">
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There is no bookmarks.</p>
+    {% endif %}
+</div>
+{% endblock %}

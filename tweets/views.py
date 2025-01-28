@@ -12,7 +12,13 @@ from .serializers import TweetSerializer
 
 
 def all_tweets(request):
-    tweets = Tweet.objects.all().order_by('-cretaed_at')
+    query = request.GET.get('q', '')
+    if query:
+        tweets = Tweet.objects.filter(content__icontains=query).order_by('-created_at')
+    else:
+        tweets = Tweet.objects.all().order_by('-created_at')
+
+    tweets = Tweet.objects.all().order_by('-created_at')
     form = TweetForm()
     if request.method == 'POST' and request.user.is_authenticated:
         form = TweetForm(request.POST , request.FILES)
@@ -21,7 +27,11 @@ def all_tweets(request):
             tweet.user = request.user
             tweet.save()
             return redirect('tweets:all_tweets')
-    return render(request, 'tweets/tweet_list.html' , {'tweets':tweets , 'form':form})
+    return render(request, 'tweets/tweet_list.html', {
+        'tweets': tweets, 
+        'form': form, 
+        'query': query
+    })
 
 def sub_tweets(request):
     tweets = Tweet.objects.filter(
@@ -29,6 +39,19 @@ def sub_tweets(request):
     ).order_by('-created_at')
     return render(request, 'tweets/tweet_list.html', {'tweets':tweets})
 
+@login_required
+def toggle_bookmark(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+    if tweet.is_bookmarked_by(request.user):
+        tweet.bookmarks.remove(request.user)
+    else:
+        tweet.bookmarks.add(request.user)
+    return redirect('tweets:all_tweets')
+
+@login_required
+def bookmarks_list(request):
+    bookmarks = request.user.bookmarked_tweets.all().order_by('-created_at')
+    return render(request, 'tweets/bookmarks_list.html', {'bookmarks': bookmarks})
 
 
 @login_required

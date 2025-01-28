@@ -58,6 +58,16 @@
                         </a>
                         <span>{{ tweet.total_likes }} Likes</span>
 
+                        <div class="tweet-actions">
+                            <a href="{% url 'tweets:toggle_bookmark' tweet.id %}" class="btn">
+                                {% if tweet.is_bookmarked %}
+                                    📕 Delete from Bookmarks
+                                {% else %}
+                                    📘 Add to Bookmarks
+                                {% endif %}
+                            </a>                            
+                        </div>
+
                         {% if tweet.user == user %}
                             <a href="" class="btn">✏️ Edit</a>
                             <a href="" class="btn text-danger">🗑️ Delete</a>

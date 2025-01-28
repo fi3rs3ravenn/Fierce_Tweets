@@ -10,6 +10,15 @@ class Tweet(models.Model):
     retweet = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='retweets')
     slug = models.SlugField(unique=True, blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)
+    bookmarks = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, 
+        related_name='bookmarked_tweets', 
+        blank=True
+    )
+
+    def is_bookmarked_by(self, user):
+        return self.bookmarks.filter(id=user.id).exists()
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(f"{self.user.username}-{self.content[:50]}")
