@@ -9,24 +9,26 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import TweetSerializer
 
-def tweet_list(request):
-    if request.user.is_authenticated:
-        tweets = Tweet.objects.filter(
-            Q(user__in=request.user.following.all()) | Q(user=request.user)
-        ).order_by('-created_at')
-    else:
-        tweets = Tweet.objects.all().order_by('-created_at')
 
-    if request.method == 'POST':
-        form = TweetForm(request.POST, request.FILES)
+
+def all_tweets(request):
+    tweets = Tweet.objects.all().order_by('-cretaed_at')
+    form = TweetForm()
+    if request.method == 'POST' and request.user.is_authenticated:
+        form = TweetForm(request.POST , request.FILES)
         if form.is_valid():
             tweet = form.save(commit=False)
             tweet.user = request.user
             tweet.save()
-            return redirect('tweets:tweet_list')
-    else:
-        form = TweetForm()
-    return render(request, 'tweets/tweet_list.html', {'tweets': tweets, 'form': form})
+            return redirect('tweets:all_tweets')
+    return render(request, 'tweets/tweet_list.html' , {'tweets':tweets , 'form':form})
+
+def sub_tweets(request):
+    tweets = Tweet.objects.filter(
+        Q(user__in=request.user.following.all())
+    ).order_by('-created_at')
+    return render(request, 'tweets/tweet_list.html', {'tweets':tweets})
+
 
 
 @login_required

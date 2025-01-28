@@ -7,9 +7,13 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TweetSerializer(serializers.ModelSerializer):
-    comments = CommentSerializer(read_only=True)
+    comments = serializers.SerializerMethodField()
     total_likes = serializers.ReadOnlyField()
 
     class Meta:
         model = Tweet
         fields = '__all__'
+
+    def get_comments(self, obj):
+        comments = obj.comments.all()
+        return CommentSerializer(comments, many=True).data
