@@ -53,6 +53,10 @@ def bookmarks_list(request):
     bookmarks = request.user.bookmarked_tweets.all().order_by('-created_at')
     return render(request, 'tweets/bookmarks_list.html', {'bookmarks': bookmarks})
 
+def is_bookmarked_by(self, user):
+    return self.bookmarks.filter(id=user.id).exists()
+
+    
 
 @login_required
 def tweet_detail(request, slug):

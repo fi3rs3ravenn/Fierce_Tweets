@@ -50,10 +50,10 @@
                     {% endif %}
                     <div class="tweet-actions">
                         <a href="{% url 'tweets:like_tweet' tweet.id %}" class="btn">
-                            {% if user in tweet.likes.all %}
-                                ❤️ Dislike
+                            {% if tweet|is_bookmarked:user %}
+                                📕 Убрать из закладок
                             {% else %}
-                                🤍 Like
+                                📘 Добавить в закладки
                             {% endif %}
                         </a>
                         <span>{{ tweet.total_likes }} Likes</span>

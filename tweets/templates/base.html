@@ -23,10 +23,15 @@
                 <a href="#" class="menu-item">
                     <span class="icon">✉️</span> Messages
                 </a>
-                <a href="{% url 'users:profile' user.username %}" class="menu-item">
-                    <span class="icon">👤</span> Profile
-                </a>
-
+                {% if user.is_authenticated %}
+                    <a href="{% url 'users:profile' user.username %}" class="menu-item">
+                        <span class="icon">👤</span> Profile
+                    </a>
+                {% else %}
+                    <a href="{% url 'users:login' %}" class="menu-item">
+                        <span class="icon">👤</span> Login
+                    </a>
+                {% endif %}
                 <div class="profile-section">
                     <img src="{{ user.avatar.url }}" alt="Avatar" class="profile-avatar">
                     <div class="profile-info">
