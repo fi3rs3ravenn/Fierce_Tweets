@@ -1,74 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-</head>
-<body>
-    <h1>
-        <a href="/">Go Back To Tweets</a>
-    </h1>
-    <h1>Profile {{ user.username }}</h1>
-    <p>Email: {{ user.email }}</p>
-    <p>About Me: {{ user.bio }}</p>
+{% extends 'base.html' %}
 
-    {% if user.avatar  %}
-        <img src="{{ user.avatar.url }}" alt="Avatar" style="max-width: 200px; height: auto;">
-    {% endif %}
+{% block title %}Profile of {{ user.username }}{% endblock %}
 
-    <p><a href="{% url 'users:followers_list' user.username %}">Followers:</a> {{ user.followers.count }}</p>
-    <p><a href="{% url 'users:following_list' user.username %}">Following:</a> {{ user.following.count }}</p>
+{% block content %}
+<div class="profile-container">
+    <h1>Profile of {{ user.username }}</h1>
+    <div class="profile-details">
+        <div class="profile-avatar-section">
+            {% if user.avatar %}
+                <img src="{{ user.avatar.url }}" alt="Аватар" class="profile-avatar">
+            {% endif %}
+        </div>
+        <div class="profile-info-section">
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>About me:</strong> {{ user.bio }}</p>
+            <p><a href="{% url 'users:followers_list' user.username %}">Followers:</a> {{ user.followers.count }}</p>
+            <p><a href="{% url 'users:following_list' user.username %}">Following:</a> {{ user.following.count }}</p>
+        </div>
+    </div>
 
     {% if user == request.user %}
-    <a href="{% url 'users:edit_profile' %}">Edit Profile</a>
-    <a href="{% url 'users:logout' %}">Logout</a>
-    {% endif %}
-
-
-    {% if user != request.user %}
-        <h3>General Subscribers</h3>
-        {% if mutual_followers %}
-            <ul>
-                {% for mutual in mutual_followers %}
-                    <li><a href="{% url 'users:profile' mutual.username %}">{{ mutual.username }}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No shared subscribers.</p>
-        {% endif %}
-    {% endif %}
-
-    {% if user != request.user %}
+    <div class="profile-actions">
+        <a href="{% url 'users:edit_profile' %}" class="btn">Edit Profile</a>
+        <a href="{% url 'users:logout' %}" class="btn btn-danger">Exit</a>
+    </div>
+    {% else %}
+    <div class="profile-follow">
         <form method="post" action="{% url 'users:follow' user.username %}">
             {% csrf_token %}
-            <button type="submit">
+            <button type="submit" class="btn">
                 {% if request.user in user.followers.all %}
-                    Unsubscribe
+                    Unfollow
                 {% else %}
-                    Subscribe
+                    Follow
                 {% endif %}
             </button>
         </form>
+    </div>
     {% endif %}
 
-    <h3>Tweets by {{ user.username }}</h3>
+    <h3>Твиты {{ user.username }}</h3>
     {% if tweets %}
-        <ul>
+        <ul class="tweet-list">
             {% for tweet in tweets %}
-                <li>
-                    <strong>{{ tweet.content }}</strong>
-                    <p>{{ tweet.created_at }}</p>
+                <li class="tweet-card">
+                    <p>{{ tweet.content }}</p>
+                    <p><small>{{ tweet.created_at }}</small></p>
                     {% if tweet.media %}
-                        <img src="{{ tweet.media.url }}" alt="Tweet Media" style="max-width: 300px;">
+                        <img src="{{ tweet.media.url }}" alt="Tweet Media" class="tweet-media">
                     {% endif %}
                 </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p>{{ user.username }} hasn't tweeted yet.</p>
+        <p>{{ user.username }} hasn't tweet anything.</p>
     {% endif %}
-</body>
-</html>
-
-
+</div>
+{% endblock %}

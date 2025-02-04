@@ -1,7 +1,15 @@
-<h1>{{ user.username }} is Following</h1>
-<ul>
+{% extends 'base.html' %}
+
+{% block title %}Following list of {{ user.username }}{% endblock %}
+
+{% block content %}
+<h1>Following list of {{ user.username }}</h1>
+<ul class="following-list">
     {% for follow in following %}
-        <li><a href="{% url 'users:profile' follow.username %}">{{ follow.username }}</a></li>
+        <li>
+            <a href="{% url 'users:profile' follow.username %}" class="btn-flwr">{{ follow.username }}</a>
+        </li>
     {% endfor %}
 </ul>
-<a href="{% url 'users:profile' user.username %}">Back to Profile</a>
+<a href="{% url 'users:profile' user.username %}" class="btn-flwr">Back to profile</a>
+{% endblock %}
